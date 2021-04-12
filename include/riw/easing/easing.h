@@ -7,7 +7,7 @@ namespace riw
   template <typename Function, typename T, typename = typename std::enable_if<std::is_floating_point<T>::value>::type>
   inline constexpr T ease_in(T normalized_time)
   {
-    return Function()(normalized_time);
+    return Function{}(normalized_time);
   }
 
   template <typename Function, typename T, typename = typename std::enable_if<std::is_floating_point<T>::value>::type>
