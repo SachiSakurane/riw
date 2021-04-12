@@ -18,7 +18,7 @@ namespace riw
         return 1;
       T mrvs_time = normalized_time - 1;
       T post_fix = std::pow(2.0, 10.0 * mrvs_time);
-      return -(post_fix * std::sin((mrvs_time - 0.075) * mk2::two_pi<T> * 3.33333333));
+      return -(post_fix * std::sin((mrvs_time - 0.075) * riw::two_pi<T> * 3.33333333));
     }
   };
 }
