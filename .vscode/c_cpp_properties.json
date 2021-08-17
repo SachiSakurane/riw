@@ -1,0 +1,24 @@
+{
+    "env": {
+        "commonIncludePaths": [
+            "${workspaceFolder}/include"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${vcpkgRoot}/arm64-osx/include",
+                "${vcpkgRoot}/x64-osx/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [],
+            "compilerPath": "/usr/local/bin/gcc-10",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "macos-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}
