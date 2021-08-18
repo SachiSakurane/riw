@@ -1,13 +1,13 @@
 #pragma once
 
+#include <riw/algorithm/lerp.hpp>
 #include <riw/algorithm/value_range.hpp>
-#include <riw/concepts/floationg_point.hpp>
+#include <riw/concepts/floating_point.hpp>
 
 namespace riw {
 template <riw::floating_point Type>
-inline constexpr Type normalize(Type v, riw::range<Type> range) {
-  assert(range.min <= v);
-  assert(v <= range.max);
-  return range.min + (v - range.min) / range.length();
+inline constexpr Type normalize(Type v, const riw::value_range<Type> &from,
+                                const riw::value_range<Type> &to) {
+  return riw::lerp(to, riw::proportion(v, from));
 }
 } // namespace riw

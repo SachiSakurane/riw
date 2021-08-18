@@ -1,4 +1,4 @@
-#include <riw/concepts/floationg_point.hpp>
+#include <riw/concepts/floating_point.hpp>
 
 namespace {
 class A;
