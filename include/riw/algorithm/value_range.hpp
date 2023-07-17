@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include <riw/concepts/arithmetic.hpp>
 #include <riw/concepts/floating_point.hpp>
 
@@ -13,6 +15,11 @@ struct value_range {
 template <riw::arithmetic Type>
 inline constexpr Type length(const value_range<Type> &r) {
   return r.max - r.min;
+}
+
+template <riw::arithmetic Type>
+inline constexpr Type clamp(Type value, const value_range<Type> &r) {
+  return std::clamp(value, r.min, r.max);
 }
 
 template <riw::floating_point Type>
