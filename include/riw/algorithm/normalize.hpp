@@ -7,7 +7,8 @@
 namespace riw {
 template <riw::floating_point Type>
 inline constexpr Type normalize(Type v, const riw::value_range<Type> &from,
-                                const riw::value_range<Type> &to) {
+                                const riw::value_range<Type> &to = {static_cast<Type>(0),
+                                                                    static_cast<Type>(1)}) {
   return riw::lerp(to, riw::proportion(v, from));
 }
 } // namespace riw
