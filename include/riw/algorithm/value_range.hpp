@@ -34,4 +34,20 @@ inline constexpr bool contain(Type value, const value_range<Type> &r) {
 
 template <riw::arithmetic Type>
 static constexpr value_range<Type> normal_range = {static_cast<Type>(0), static_cast<Type>(1)};
+
+template <riw::arithmetic Type, riw::value_range<Type> Range>
+struct ranged {
+  constexpr ranged(Type v) : value{riw::clamp(v, Range)} {}
+
+  ranged(const ranged &) = default;
+  ranged(ranged &&) = default;
+  ranged &operator=(const ranged &) = default;
+  ranged &operator=(ranged &&r) = default;
+
+  Type get() const { return value; }
+
+private:
+  Type value;
+};
+
 } // namespace riw
