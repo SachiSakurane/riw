@@ -37,6 +37,7 @@ static constexpr value_range<Type> normal_range = {static_cast<Type>(0), static_
 
 template <riw::arithmetic Type, riw::value_range<Type> Range>
 struct ranged {
+  static constexpr decltype(auto) range = Range;
   constexpr ranged(Type v) : value{riw::clamp(v, Range)} {}
 
   ranged(const ranged &) = default;
