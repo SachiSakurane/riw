@@ -51,4 +51,9 @@ private:
   Type value;
 };
 
+template <riw::arithmetic Type, riw::value_range<Type> Range>
+bool operator==(const ranged<Type, Range> &a, const ranged<Type, Range> &b) {
+  return a.get() == b.get();
+}
+
 } // namespace riw
