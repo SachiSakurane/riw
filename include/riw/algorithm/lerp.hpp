@@ -16,8 +16,8 @@ inline constexpr FloatType lerp(const value_range<FloatType> &range, FloatType x
   return range.min * (static_cast<FloatType>(1) - x) + range.max * x;
 }
 
-template <class Container>
-inline constexpr decltype(auto) lerp(const Container &c, riw::floating_point auto v) {
+template <class Container, riw::floating_point FloatType>
+inline constexpr FloatType lerp(const Container &c, FloatType v) {
   using cof_value_type = decltype(v);
   v = std::clamp(v, static_cast<cof_value_type>(0.0), static_cast<cof_value_type>(1.0));
   if (v == static_cast<cof_value_type>(1.0))
