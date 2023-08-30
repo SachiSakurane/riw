@@ -42,4 +42,9 @@ inline constexpr decltype(auto) inverse(Type v,
                                         riw::value_range<Type> range = riw::normal_range<Type>) {
   return range.max + range.min - v;
 }
+
+template <riw::arithmetic To>
+value_range<To> convert(const auto &range) {
+  return value_range<To>{static_cast<To>(range.min), static_cast<To>(range.max)};
+}
 }
