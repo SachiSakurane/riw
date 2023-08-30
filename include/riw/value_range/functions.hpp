@@ -44,7 +44,13 @@ inline constexpr decltype(auto) inverse(Type v,
 }
 
 template <riw::arithmetic To>
-value_range<To> convert(const auto &range) {
-  return value_range<To>{static_cast<To>(range.min), static_cast<To>(range.max)};
+inline constexpr decltype(auto) convert(const auto &range) {
+  return riw::value_range<To>{static_cast<To>(range.min), static_cast<To>(range.max)};
+}
+
+template <riw::floating_point Type>
+inline constexpr decltype(auto) log10(const value_range<Type> &r) {
+  assert(r.min >= 0);
+  return riw::value_range{std::log10(r.min), std::log10(r.max)};
 }
 }
