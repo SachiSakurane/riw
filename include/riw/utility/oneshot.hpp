@@ -15,7 +15,8 @@ namespace riw
     {
     }
 
-    const std::chrono::milliseconds duration;
+    decltype(auto) get_duration() const { return duration; }
+    void set_duration(std::chrono::milliseconds dur) { duration = dur; }
 
     bool is_end() const
     {
@@ -35,6 +36,7 @@ namespace riw
     }
 
   private:
+    std::chrono::milliseconds duration;
     std::chrono::steady_clock::time_point update_time{std::chrono::steady_clock::now()};
   };
 } // namespace riw
