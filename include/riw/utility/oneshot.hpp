@@ -20,7 +20,7 @@ namespace riw
 
     bool is_end() const
     {
-      return duration > (std::chrono::steady_clock::now() - update_time);
+      return duration < (std::chrono::steady_clock::now() - update_time);
     }
 
     template <class Easing = riw::quint>
