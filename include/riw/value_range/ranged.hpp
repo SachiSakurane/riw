@@ -2,12 +2,14 @@
 
 #include <algorithm>
 
-#include <riw/value_range/value_range.hpp>
 #include <riw/concepts/arithmetic.hpp>
+#include <riw/value_range/value_range.hpp>
 
 namespace riw {
-template <riw::arithmetic Type, riw::value_range<Type> Range>
+template <class Type, riw::value_range<Type> Range>
 struct ranged {
+  using value_type = Type;
+
   static constexpr decltype(auto) range_value = Range;
   constexpr ranged(Type v) : value{riw::clamp(v, Range)} {}
 
@@ -26,4 +28,4 @@ template <riw::arithmetic Type, riw::value_range<Type> Range>
 bool operator==(const ranged<Type, Range> &a, const ranged<Type, Range> &b) {
   return a.get() == b.get();
 }
-}
+} // namespace riw

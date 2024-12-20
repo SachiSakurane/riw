@@ -1,0 +1,4 @@
+build --cxxopt=-std=c++2b
+
+# Enable Bzlmod for every Bazel command
+common --enable_bzlmod

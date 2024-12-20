@@ -7,7 +7,7 @@
 #include <riw/concepts/floating_point.hpp>
 
 namespace riw {
-template <riw::arithmetic Type>
+template <class Type>
 struct value_range {
   const Type min, max;
   constexpr value_range(Type _min, Type _max) : min{_min}, max{_max} {}
