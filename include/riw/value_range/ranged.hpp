@@ -1,8 +1,8 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 
-#include <riw/concepts/arithmetic.hpp>
 #include <riw/value_range/value_range.hpp>
 
 namespace riw {
@@ -11,21 +11,20 @@ struct ranged {
   using value_type = Type;
 
   static constexpr decltype(auto) range_value = Range;
-  constexpr ranged(Type v) : value{riw::clamp(v, Range)} {}
+  constexpr ranged(Type v) : value{std::clamp(v, range_value.min, range_value.max)} {}
 
   ranged(const ranged &) = default;
   ranged(ranged &&) = default;
   ranged &operator=(const ranged &) = default;
   ranged &operator=(ranged &&r) = default;
 
-  Type get() const { return value; }
+  operator value_type() const { return value; }
 
-private:
-  Type value;
+  const Type value;
 };
 
-template <riw::arithmetic Type, riw::value_range<Type> Range>
-bool operator==(const ranged<Type, Range> &a, const ranged<Type, Range> &b) {
-  return a.get() == b.get();
+template <std::equality_comparable Type, riw::value_range<Type> Range>
+constexpr bool operator==(const ranged<Type, Range> &a, const ranged<Type, Range> &b) {
+  return a.value == b.value;
 }
 } // namespace riw
