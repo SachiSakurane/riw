@@ -104,52 +104,52 @@ struct brand<T, B, std::enable_if_t<std::is_arithmetic_v<T>>> {
 };
 
 template <class T, template_string_literal B>
-brand<T, B> operator*(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr brand<T, B> operator*(const brand<T, B> &t1, const brand<T, B> &t2) {
   return brand<T, B>(t1) *= t2;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator/(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr brand<T, B> operator/(const brand<T, B> &t1, const brand<T, B> &t2) {
   return brand<T, B>(t1) /= t2;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator%(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr brand<T, B> operator%(const brand<T, B> &t1, const brand<T, B> &t2) {
   return brand<T, B>(t1) %= t2;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator+(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr brand<T, B> operator+(const brand<T, B> &t1, const brand<T, B> &t2) {
   return brand<T, B>(t1) += t2;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator-(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr brand<T, B> operator-(const brand<T, B> &t1, const brand<T, B> &t2) {
   return brand<T, B>(t1) -= t2;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator<<(const brand<T, B> &t, std::size_t n) {
+inline constexpr brand<T, B> operator<<(const brand<T, B> &t, std::size_t n) {
   return brand<T, B>(t) <<= n;
 }
 
 template <class T, template_string_literal B>
-brand<T, B> operator>>(const brand<T, B> &t, std::size_t n) {
+inline constexpr brand<T, B> operator>>(const brand<T, B> &t, std::size_t n) {
   return brand<T, B>(t) >>= n;
 }
 
 template <class T, template_string_literal B>
-bool operator==(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr bool operator==(const brand<T, B> &t1, const brand<T, B> &t2) {
   return t1.value == t2.value;
 }
 
 template <class T, template_string_literal B>
-bool operator<(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr bool operator<(const brand<T, B> &t1, const brand<T, B> &t2) {
   return t1.value < t2.value;
 }
 
 template <class T, template_string_literal B>
-bool operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr bool operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
   return t1.value <=> t2.value;
 }
 
