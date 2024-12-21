@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 
 #include <riw/utility/template_string_literal.hpp>
@@ -20,8 +21,8 @@ struct brand<T, B, std::enable_if_t<std::is_arithmetic_v<T>>> {
   using reference = brand<T, B> &;
   using const_reference = const brand<T, B> &;
 
-  brand() noexcept : value() {}
-  brand(value_type v) noexcept : value(v) {}
+  constexpr brand() noexcept : value() {}
+  constexpr brand(value_type v) noexcept : value(v) {}
 
   brand(const brand &) = default;
   brand &operator=(const brand &) = default;
@@ -138,13 +139,18 @@ brand<T, B> operator>>(const brand<T, B> &t, std::size_t n) {
 }
 
 template <class T, template_string_literal B>
-bool operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
-  return t1.value <=> t2.value;
+bool operator==(const brand<T, B> &t1, const brand<T, B> &t2) {
+  return t1.value == t2.value;
 }
 
 template <class T, template_string_literal B>
-bool operator==(const brand<T, B> &t1, const brand<T, B> &t2) {
-  return t1.value == t2.value;
+bool operator<(const brand<T, B> &t1, const brand<T, B> &t2) {
+  return t1.value < t2.value;
+}
+
+template <class T, template_string_literal B>
+bool operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
+  return t1.value <=> t2.value;
 }
 
 } // namespace riw
