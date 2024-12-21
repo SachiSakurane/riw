@@ -3,9 +3,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include <riw/concepts/arithmetic.hpp>
-#include <riw/concepts/floating_point.hpp>
-
 namespace riw {
 template <class Type>
 struct value_range {
