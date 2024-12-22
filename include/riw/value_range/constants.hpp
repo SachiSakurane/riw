@@ -4,5 +4,5 @@
 
 namespace riw {
 template <class Type>
-static constexpr value_range<Type> normal_range = {static_cast<Type>(0), static_cast<Type>(1)};
+static constexpr value_range normal_range = {static_cast<Type>(0), static_cast<Type>(1)};
 }
