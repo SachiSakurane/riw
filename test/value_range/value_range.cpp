@@ -28,3 +28,13 @@ TEST(Utility_ValueRange_ValueRangeTest, BlandedType) {
     ASSERT_EQ(actual.max, 42);
   }
 }
+
+TEST(Utility_ValueRange_ValueRangeTest, Convert) {
+  using branded = riw::brand<int, "brand">;
+  {
+    riw::value_range b{static_cast<branded>(0), static_cast<branded>(100)};
+    riw::value_range<int> actual = b;
+    ASSERT_EQ(actual.min, 0);
+    ASSERT_EQ(actual.max, 100);
+  }
+}
