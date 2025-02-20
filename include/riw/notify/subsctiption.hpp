@@ -1,7 +1,5 @@
 #pragma once
 
-#include <concepts>
-
 namespace riw {
 template <class Type>
 class subscription {

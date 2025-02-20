@@ -57,10 +57,32 @@ TEST(Notify_ConnectionTest, Notify) {
   auto o = i | [](auto i) { return std::to_string(i); };
 
   testing::internal::CaptureStdout();
-
   auto s = o | [](auto s) { std::cout << "string: " << s << std::endl; };
-
   std::string log = testing::internal::GetCapturedStdout();
 
   ASSERT_EQ(static_cast<std::string>(log), "string: 42\n"s);
+}
+
+TEST(Notify_ConnectionTest, Unsbscribe) {
+  riw::behavior<int> i{42};
+
+  ASSERT_EQ(i, 42);
+  auto o = i | [](auto i) { return std::to_string(i); };
+
+  {
+    auto s = o | [](auto s) { std::cout << "bar" << s << std::endl; };
+    ASSERT_EQ(o.subscriptions_count(), 1);
+  }
+
+  ASSERT_EQ(o.subscriptions_count(), 0);
+
+  auto s = o | [](auto s) { std::cout << "foo" << s << std::endl; };
+
+  ASSERT_EQ(o.subscriptions_count(), 1);
+
+  testing::internal::CaptureStdout();
+  i = 99;
+  std::string log = testing::internal::GetCapturedStdout();
+
+  ASSERT_EQ(static_cast<std::string>(log), "foo99\n"s);
 }
