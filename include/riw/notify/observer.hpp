@@ -15,7 +15,7 @@ public:
 
   virtual ~observer() = default;
 
-  void add_subscribe(std::weak_ptr<subscription_type> s) {
+  void subscribe(std::weak_ptr<subscription_type> s) {
     auto &ss = subscriptions.emplace_back(s);
     if (auto l = ss.lock(); l) {
       l->receive(observe());

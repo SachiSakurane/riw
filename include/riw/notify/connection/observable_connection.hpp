@@ -45,12 +45,12 @@ namespace detail {
 
     constexpr observable_connection(O &o, F &&f) {
       sub = std::make_shared<subscription_impl>(o, std::forward<F>(f));
-      o.add_subscribe(sub);
+      o.subscribe(sub);
     }
 
     operator value_type() const { return sub->observe(); }
     value_type observe() const { return sub->observe(); }
-    void add_subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->add_subscribe(s); }
+    void subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->subscribe(s); }
     std::size_t subscriptions_count() const { return sub->subscriptions_count(); }
 
   private:
@@ -84,12 +84,12 @@ namespace detail {
 
     constexpr observable_connection_r(O &&o, F &&f)
         : sub{std::make_shared<subscription_impl>(std::forward<O>(o), std::forward<F>(f))} {
-      sub->get_observer()->add_subscribe(sub);
+      sub->get_observer()->subscribe(sub);
     }
 
     operator value_type() const { return sub->observe(); }
     value_type observe() const { return sub->observe(); }
-    void add_subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->add_subscribe(s); }
+    void subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->subscribe(s); }
     std::size_t subscriptions_count() const { return sub->subscriptions_count(); }
 
   private:

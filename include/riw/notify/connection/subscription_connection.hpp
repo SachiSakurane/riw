@@ -40,7 +40,7 @@ namespace detail {
 
     constexpr subscription_connection(O &o, F &&f) {
       sub = std::make_shared<subscription_impl>(o, std::forward<F>(f));
-      sub->get_observable()->get().add_subscribe(sub);
+      sub->get_observable()->get().subscribe(sub);
     }
 
   private:
@@ -67,7 +67,7 @@ namespace detail {
 
     constexpr subscription_connection_r(O &&o, F &&f)
         : sub{std::make_shared<subscription_impl>(std::forward<O>(o), std::forward<F>(f))} {
-      sub->get_observable()->add_subscribe(sub);
+      sub->get_observable()->subscribe(sub);
     }
 
   private:

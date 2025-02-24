@@ -12,6 +12,6 @@ concept observable =
     requires(ObservableType o,
              std::weak_ptr<riw::subscription<typename ObservableType::value_type>> s) {
       { o.observe() } -> std::convertible_to<typename ObservableType::value_type>;
-      o.add_subscribe(s);
+      o.subscribe(s);
     };
 } // namespace riw
