@@ -1,9 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <vector>
 
 #include <riw/notify/concepts/observable.hpp>
-#include <riw/notify/subsctiption.hpp>
+#include <riw/notify/subscription.hpp>
 
 namespace riw {
 template <std::copy_constructible Type>
@@ -12,30 +13,41 @@ public:
   using value_type = Type;
   using subscription_type = riw::subscription<Type>;
 
-  void add_subscription(subscription_type &s) {
-    subscriptions.emplace_back(s);
-    s.receive(observe());
-  }
+  virtual ~observer() = default;
 
-  void remove_subscription(subscription_type &s) {
-    if (auto it = std::remove_if(std::begin(subscriptions), std::end(subscriptions),
-                                 [&s](const auto &ss) { return &(ss.get()) == &s; });
-        it != std::end(subscriptions)) {
-      subscriptions.erase(it);
+  void add_subscribe(std::weak_ptr<subscription_type> s) {
+    auto &ss = subscriptions.emplace_back(s);
+    if (auto l = ss.lock(); l) {
+      l->receive(observe());
     }
   }
 
   virtual value_type observe() const = 0;
 
   virtual void notify(value_type v) {
-    for (auto &sub : subscriptions) {
-      sub.get().receive(v);
+    fetch();
+
+    for (auto s : subscriptions) {
+      if (auto l = s.lock(); l) {
+        l->receive(v);
+      }
     }
   }
 
-  std::size_t subscriptions_count() const { return subscriptions.size(); };
+  std::size_t subscriptions_count() const {
+    return std::count_if(std::begin(subscriptions), std::end(subscriptions),
+                         [](auto s) { return !s.expired(); });
+  };
+
+  void fetch() {
+    subscriptions.erase(std::remove_if(std::begin(subscriptions), std::end(subscriptions),
+                                       [](auto s) { return s.expired(); }),
+                        std::end(subscriptions));
+  }
+
+protected:
+  std::vector<std::weak_ptr<subscription_type>> subscriptions;
 
 private:
-  std::vector<std::reference_wrapper<subscription_type>> subscriptions;
 };
 } // namespace riw

@@ -15,11 +15,11 @@ TEST(Notify_ConnectionTest, Pipeline) {
   auto o = i | [](auto i) { return i * 2; };
   ASSERT_EQ(o, 20);
 
-  auto oo = i | [](auto i) { return i * 2; } | [](auto i) { return i * 2; };
-  ASSERT_EQ(oo, 40);
+  auto oo = i | [](auto i) { return i * 3; } | [](auto i) { return i * 7; };
+  ASSERT_EQ(oo, 210);
 
-  auto ooo = oo | [](auto i) { return i * 2; };
-  ASSERT_EQ(ooo, 80);
+  auto ooo = oo | [](auto i) { return i * 5; };
+  ASSERT_EQ(ooo, 1050);
 }
 
 TEST(Notify_ConnectionTest, Transform) {
@@ -27,7 +27,7 @@ TEST(Notify_ConnectionTest, Transform) {
 
   ASSERT_EQ(i, 10);
 
-  auto o = i | [](auto i) { return std::to_string(i); } | [](auto s) { return s + "nyan"s; };
+  auto o = i | [](auto i) { return std::to_string(i) + "nyan"s; };
 
   ASSERT_EQ(static_cast<std::string>(o), "10nyan"s);
 }

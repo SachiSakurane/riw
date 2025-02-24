@@ -1,21 +1,17 @@
 #pragma once
 
-#include <algorithm>
-#include <concepts>
-#include <type_traits>
-
 #include <riw/notify/observer.hpp>
 
 namespace riw {
-template <std::copy_constructible Type>
-class behavior : public riw::observer<Type> {
+template <std::copy_constructible Type, observable ObserverType = riw::observer<Type>>
+class behavior : public ObserverType {
 public:
-  using value_type = riw::observer<Type>::value_type;
+  using value_type = ObserverType::value_type;
 
-  constexpr behavior(value_type initial_value) : current_value{initial_value} {}
+   behavior(value_type initial_value) : current_value{initial_value} {}
 
   template <class... Args>
-  constexpr behavior(Args &&...args) : current_value{std::forward<Args>(args)...} {}
+   behavior(Args &&...args) : current_value{std::forward<Args>(args)...} {}
 
   behavior(const behavior &) = default;
   behavior(behavior &&) = default;
