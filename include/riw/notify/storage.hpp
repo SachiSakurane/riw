@@ -10,7 +10,7 @@ class storage {
 public:
   storage() {}
 
-  storage &operator=(riw::stoable auto &&s) {
+  storage &operator+=(riw::stoable auto &&s) {
     this->store.emplace_back(std::move(s));
     return *this;
   }

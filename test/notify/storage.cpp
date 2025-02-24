@@ -11,7 +11,7 @@ TEST(Notify_StorageTest, Pipeline) {
   riw::behavior<int> i{10};
 
   testing::internal::CaptureStdout();
-  s = i | [](auto i) { return i * 100; } | [](auto i) { std::cout << "log: " << i << std::endl; };
+  s += i | [](auto i) { return i * 100; } | [](auto i) { std::cout << "log: " << i << std::endl; };
   i = 42;
   std::string log = testing::internal::GetCapturedStdout();
   ASSERT_EQ(static_cast<std::string>(log), "log: 1000\nlog: 4200\n");
@@ -23,9 +23,9 @@ TEST(Notify_StorageTest, LifetimeExtend) {
 
   {
     auto discarded = i | [](auto i) { std::cout << "discarded log: " << i << std::endl; };
-    s = i | [](auto i) { std::cout << "extended: " << i << ","; };
-    s = i | [](auto i) { return i * 100; } |
-        [](auto i) { std::cout << "extended: " << i << std::endl; };
+    s += i | [](auto i) { std::cout << "extended: " << i << ","; };
+    s += i | [](auto i) { return i * 100; } |
+         [](auto i) { std::cout << "extended: " << i << std::endl; };
   }
 
   testing::internal::CaptureStdout();
