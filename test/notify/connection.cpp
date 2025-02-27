@@ -2,8 +2,8 @@
 #include <string>
 
 #include <gtest/gtest.h>
+#include <riw/notify/adapter.hpp>
 #include <riw/notify/behavior.hpp>
-#include <riw/notify/connection.hpp>
 
 using namespace std::literals::string_literals;
 

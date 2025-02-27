@@ -43,8 +43,8 @@ namespace detail {
       const F func;
     };
 
-    constexpr observable_connection(O &o, F &&f) {
-      sub = std::make_shared<subscription_impl>(o, std::forward<F>(f));
+    constexpr observable_connection(O &o, F &&f)
+        : sub{std::make_shared<subscription_impl>(o, std::forward<F>(f))} {
       o.subscribe(sub);
     }
 

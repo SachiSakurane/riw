@@ -15,7 +15,7 @@ public:
 
   virtual ~observer() = default;
 
-  void subscribe(std::weak_ptr<subscription_type> s) {
+  virtual void subscribe(std::weak_ptr<subscription_type> s) {
     auto &ss = subscriptions.emplace_back(s);
     if (auto l = ss.lock(); l) {
       l->receive(observe());
@@ -34,12 +34,12 @@ public:
     }
   }
 
-  std::size_t subscriptions_count() const {
+  virtual std::size_t subscriptions_count() const {
     return std::count_if(std::begin(subscriptions), std::end(subscriptions),
                          [](auto s) { return !s.expired(); });
   };
 
-  void fetch() {
+  virtual void fetch() {
     subscriptions.erase(std::remove_if(std::begin(subscriptions), std::end(subscriptions),
                                        [](auto s) { return s.expired(); }),
                         std::end(subscriptions));
