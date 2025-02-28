@@ -10,6 +10,9 @@ TEST(Notify_ToObserverTest, AssignLeftValueObserver) {
   auto o = b | [](auto i){ return i * 92; };
   std::unique_ptr<riw::observer<int>> oo{o | riw::to_observer_unique_ptr};
   ASSERT_EQ(oo->observe(), 3864);
+
+  b = 27;
+  ASSERT_EQ(oo->observe(), 2484);
 }
 
 TEST(Notify_ToObserverTest, AssignRightValueObserver) {
@@ -17,4 +20,7 @@ TEST(Notify_ToObserverTest, AssignRightValueObserver) {
   
   std::unique_ptr<riw::observer<int>> o{b | [](auto i){ return i * 92; } | riw::to_observer_unique_ptr};
   ASSERT_EQ(o->observe(), 3864);
+
+  b = 27;
+  ASSERT_EQ(o->observe(), 2484);
 }
