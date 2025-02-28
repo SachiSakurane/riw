@@ -3,7 +3,7 @@
 #include <functional>
 #include <optional>
 
-#include <riw/notify/concepts/observable.hpp>
+#include <riw/notify/observer.hpp>
 
 namespace riw {
 namespace detail {
@@ -52,6 +52,8 @@ namespace detail {
     value_type observe() const { return sub->observe(); }
     void subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->subscribe(s); }
     std::size_t subscriptions_count() const { return sub->subscriptions_count(); }
+    void notify(value_type v) { sub->notify(v); }
+    void fetch() { sub->fetch(); }
 
   private:
     std::shared_ptr<subscription_impl> sub;
@@ -91,6 +93,8 @@ namespace detail {
     value_type observe() const { return sub->observe(); }
     void subscribe(std::weak_ptr<riw::subscription<value_type>> s) { sub->subscribe(s); }
     std::size_t subscriptions_count() const { return sub->subscriptions_count(); }
+    void notify(value_type v) { sub->notify(v); }
+    void fetch() { sub->fetch(); }
 
   private:
     std::shared_ptr<subscription_impl> sub;
