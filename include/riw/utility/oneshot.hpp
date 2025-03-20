@@ -17,6 +17,16 @@ public:
   bool is_end() const { return duration < (std::chrono::steady_clock::now() - update_time); }
 
   template <class Easing = riw::quint>
+  ValueType get_in() const {
+    const auto d = std::chrono::steady_clock::now() - update_time;
+    const auto v = std::clamp(
+        static_cast<ValueType>(std::chrono::duration_cast<std::chrono::milliseconds>(d).count()) /
+            static_cast<float>(duration.count()),
+        static_cast<ValueType>(0), static_cast<ValueType>(1));
+    return riw::ease_in<Easing>(v);
+  }
+
+  template <class Easing = riw::quint>
   ValueType get_out() const {
     const auto d = std::chrono::steady_clock::now() - update_time;
     const auto v = std::clamp(
