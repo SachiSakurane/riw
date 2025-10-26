@@ -50,7 +50,7 @@ inline constexpr decltype(auto) convert(const auto &range) {
   return riw::value_range<To>{static_cast<To>(range.min), static_cast<To>(range.max)};
 }
 
-template <std::floating_point Type>
+template <class Type>
 inline constexpr decltype(auto) log10(const value_range<Type> &r) {
   assert(r.min >= 0);
   return riw::value_range{std::log10(r.min), std::log10(r.max)};
