@@ -20,7 +20,7 @@ struct ranged {
 
   operator value_type() const { return value; }
 
-  const Type value;
+  Type value;
 };
 
 template <std::equality_comparable Type, riw::value_range<Type> Range>
