@@ -81,9 +81,11 @@ public:
     std::thread([this, cb = std::forward<Callback>(cb), active]() mutable {
       cppcoro::sync_wait([&, active]() -> cppcoro::task<void> {
         auto gen = watch();
-        for co_await(auto v : gen) {
+        auto it = co_await gen.begin();
+        while (it != gen.end()) {
           if (!active->load()) co_return;
-          cb(v);
+          cb(*it);
+          co_await ++it;
         }
       }());
     }).detach();
