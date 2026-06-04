@@ -1,10 +1,14 @@
 #pragma once
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <concepts>
 
 #include <riw/algorithm/lerp.hpp>
-#include <riw/value_range/value_range.hpp>
 #include <riw/concepts/arithmetic.hpp>
+#include <riw/value_range/constants.hpp>
+#include <riw/value_range/value_range.hpp>
 
 namespace riw {
 template <std::totally_ordered Type>

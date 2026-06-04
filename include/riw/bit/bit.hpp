@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <limits>
 
 #include <riw/concepts/integral.hpp>
@@ -48,15 +49,14 @@ constexpr inline IntegralType bit_width(IntegralType x) noexcept {
 
 template <riw::unsigned_integral IntegralType>
 constexpr inline IntegralType bit_reverse(IntegralType x, IntegralType nb) noexcept {
-  // static_assert(std::numeric_limits<IntegralType>::digits == 32);
-  assert(nb > 0 && std::numeric_limits<IntegralType>::digits > nb);
+  assert(nb > 0 && std::numeric_limits<IntegralType>::digits >= nb);
 
-  x = (x << 16) | (x >> 16);
-  x = ((x & 0x00FF00FF) << 8) | ((x & 0xFF00FF00) >> 8);
-  x = ((x & 0x0F0F0F0F) << 4) | ((x & 0xF0F0F0F0) >> 4);
-  x = ((x & 0x33333333) << 2) | ((x & 0xCCCCCCCC) >> 2);
-  x = ((x & 0x55555555) << 1) | ((x & 0xAAAAAAAA) >> 1);
+  IntegralType result = 0;
+  for (IntegralType i = 0; i < nb; ++i) {
+    result = static_cast<IntegralType>((result << 1) | (x & 1));
+    x >>= 1;
+  }
 
-  return ((x >> (32 - nb)) & (0xFFFFFFFF >> (32 - nb)));
+  return result;
 }
 } // namespace riw

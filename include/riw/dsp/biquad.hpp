@@ -1,7 +1,10 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 #include <concepts>
+
+#include <riw/math/constants.hpp>
 
 namespace riw {
 template <std::floating_point FloatType>

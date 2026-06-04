@@ -149,7 +149,7 @@ inline constexpr bool operator<(const brand<T, B> &t1, const brand<T, B> &t2) {
 }
 
 template <class T, template_string_literal B>
-inline constexpr bool operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
+inline constexpr auto operator<=>(const brand<T, B> &t1, const brand<T, B> &t2) {
   return t1.value <=> t2.value;
 }
 
