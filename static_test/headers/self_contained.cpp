@@ -1,4 +1,5 @@
 #include <riw/dsp/biquad.hpp>
+#include <riw/dsp/decibels.hpp>
 #include <riw/dsp/window.hpp>
 #include <riw/value_range/functions.hpp>
 

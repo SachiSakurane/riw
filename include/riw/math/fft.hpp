@@ -82,10 +82,12 @@ inline void dft(const std::vector<ComplexType> &src, std::vector<ComplexType> &d
   for (size_t k = 0; k < n; ++k) {
     const auto step = unit_root<ComplexType>(k, n, is_forward);
     auto twiddle = ComplexType{1};
+    auto sum = ComplexType{};
     for (size_t j = 0; j < n; ++j) {
-      dst[k] += src[j] * twiddle;
+      sum += src[j] * twiddle;
       twiddle *= step;
     }
+    dst[k] = sum;
   }
 }
 
@@ -151,18 +153,19 @@ inline void fft(const SrcContainer &src, DstContainer &dst) {
   using value_type = typename complex_type::value_type;
 
   assert(src.size() == dst.size() && "invalid output size");
-  if (src.size() == 0)
+  const auto size = src.size();
+  if (size == 0)
     return;
 
-  std::vector<complex_type> work_src(src.size());
+  std::vector<complex_type> work_src(size);
   std::vector<complex_type> work_dst;
-  for (size_t i = 0; i < src.size(); ++i)
+  for (size_t i = 0; i < size; ++i)
     work_src[i] = static_cast<complex_type>(src[i]);
 
   detail::fft_impl(work_src, work_dst, IsForward);
 
-  const auto norm = static_cast<value_type>(1) / std::sqrt(static_cast<value_type>(src.size()));
-  for (size_t i = 0; i < dst.size(); ++i)
+  const auto norm = static_cast<value_type>(1) / std::sqrt(static_cast<value_type>(size));
+  for (size_t i = 0; i < size; ++i)
     dst[i] = norm * work_dst[i];
 }
 
