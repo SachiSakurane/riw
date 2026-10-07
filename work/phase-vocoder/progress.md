@@ -223,3 +223,16 @@ Windows correction validation input (SHA-256, excluding ledger):
 - CMake Debug reconfigure/build and all 4 window tests pass after this path
   correction. Executable C++ files are unchanged from the passing full suites.
 - External_GTest.cmake SHA-256: `9155963aff752474f1ce015dde07fc6052a203d315b24b7bc682b1677f43fac3`.
+
+### Windows Debug library names
+- Run 37606746059 at 9d330138bd6f2ba1369cbd2b14c0abaaf500ecbe:
+  Windows Release build and runtime tests succeeded. Debug compiled but failed
+  to link gtestd.lib. Debug job 112743969528's Fail Dump explicitly lists
+  lib/Debug/gmock.lib, gtest.lib and gtest_main.lib without a d postfix.
+- The old imported-library path logic assumed a d postfix. Remove this assumed
+  postfix for the pinned GoogleTest v1.15.2, retaining Debug/Release directory
+  selection. This addresses the remaining Debug-specific link error.
+- Pending: final Windows Debug build/runtime and Release reconfirmation.
+- Local CMake Debug reconfigure/build passes. No executable-code changes since
+  the passing full suites. Final External_GTest.cmake SHA-256:
+  `6d37937110474dcab0136e7ec7d675de435f8e110f0b946adfedde622768c43a`.
