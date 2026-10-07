@@ -164,7 +164,7 @@ its identifier and remote confirmation are reported in the chat after push.
   requested. CuteAudioPoC integration and deployment-hardware CPU measurement
   remain with the original Micro-Unison task.
 
-## Windows CI correction (2026-10-07, in progress)
+## Windows CI correction (2026-10-07; completed below)
 - User reported Windows build failure on PR #2. Run 37598594414 at head
   81383a01b5709d1a3842d019e56597cd14c6163f failed in the GoogleTest git-clone
   ExternalProject download step, before compiling riw tests. Other OS jobs
@@ -236,3 +236,21 @@ Windows correction validation input (SHA-256, excluding ledger):
 - Local CMake Debug reconfigure/build passes. No executable-code changes since
   the passing full suites. Final External_GTest.cmake SHA-256:
   `6d37937110474dcab0136e7ec7d675de435f8e110f0b946adfedde622768c43a`.
+
+### Confirmed Windows completion
+- Verified implementation/build-settings commit:
+  323d972b34894e86774440851ed9f4a28518ffc6.
+- Run https://github.com/SachiSakurane/riw/actions/runs/37607209497:
+  - Windows Debug job 112745503299: build and Test Windows steps succeeded;
+    all 38 tests passed, 124.807 seconds runtime.
+  - Windows Release job 112745503355: build and Test Windows steps succeeded;
+    all 38 tests passed, 7.036 seconds runtime.
+- Completed-job logs were retrieved directly through the jobs/logs API because
+  the overall run remains queued for other OS jobs, which is distinct from
+  the completed Windows jobs. No overall matrix-success claim is made.
+- The requested Windows correction is implemented, tested and pushed in PR #2.
+  This receipt changes only the ledger; executable sources and dependency/build
+  settings remain identical to the verified commit above.
+- Original scope boundaries remain: no merge/deployment, no CuteAudioPoC
+  integration. Other OS matrix jobs are still queued and were not changed by
+  this Windows-specific correction.
