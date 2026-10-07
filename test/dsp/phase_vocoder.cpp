@@ -45,7 +45,7 @@ std::vector<double> run(Shifter &shifter, const std::vector<double> &input, size
 std::vector<double> sine(size_t count, double rate, double frequency) {
   std::vector<double> result(count);
   for (size_t i = 0; i < count; ++i)
-    result[i] = 0.5 * std::sin(riw::two_pi<double> * frequency * i / rate);
+    result[i] = 0.5 * std::sin(riw::two_pi<double> * frequency * static_cast<double>(i) / rate);
   return result;
 }
 
@@ -58,7 +58,8 @@ double measured_frequency(const std::vector<double> &signal, double rate, double
     const auto step = std::polar(1.0, riw::two_pi<double> * frequency / rate);
     std::complex<double> oscillator{1}, sum{};
     for (size_t i = 0; i < count; ++i) {
-      const auto window = 0.5 - 0.5 * std::cos(riw::two_pi<double> * i / (count - 1));
+      const auto window = 0.5 - 0.5 * std::cos(riw::two_pi<double> * static_cast<double>(i) /
+                                              static_cast<double>(count - 1));
       sum += signal[begin + i] * window * oscillator;
       oscillator *= step;
     }
@@ -81,7 +82,7 @@ double measured_frequency(const std::vector<double> &signal, double rate, double
 TEST(Dsp_PhaseVocoder, UnityReconstructsImpulseSineAndNoiseAtDeclaredLatency) {
   std::mt19937 random(42);
   std::uniform_real_distribution<double> distribution(-0.5, 0.5);
-  for (size_t n : {64, 256, 1024}) {
+  for (size_t n : std::array<size_t, 3>{64, 256, 1024}) {
     for (size_t h : {n / 4, n / 8}) {
       for (int signal = 0; signal < 3; ++signal) {
         Shifter shifter;
@@ -206,8 +207,8 @@ TEST(Dsp_PhaseVocoder, ProcessingHasNoHeapTrafficAndRemainsFiniteForLongStreams)
   ASSERT_TRUE(shifter.prepare({96000, 2, 256, 32}));
   std::array<float, 257> left{}, right{}, out_left{}, out_right{};
   for (size_t i = 0; i < left.size(); ++i) {
-    left[i] = static_cast<float>(0.5 * std::sin(i * 0.09));
-    right[i] = static_cast<float>(0.3 * std::cos(i * 0.17));
+    left[i] = static_cast<float>(0.5 * std::sin(static_cast<double>(i) * 0.09));
+    right[i] = static_cast<float>(0.3 * std::cos(static_cast<double>(i) * 0.17));
   }
   std::array<const float *, 2> in{left.data(), right.data()};
   std::array<float *, 2> out{out_left.data(), out_right.data()};
@@ -237,7 +238,7 @@ TEST(Dsp_PhaseVocoder, FloatUnityAndIndependentStereoReconstruct) {
   std::vector<float> left(4096), right(left.size());
   std::mt19937 random(9);
   for (size_t i = 0; i < left.size() - 512; ++i) {
-    left[i] = static_cast<float>(std::sin(i * 0.317));
+    left[i] = static_cast<float>(std::sin(static_cast<double>(i) * 0.317));
     right[i] = static_cast<float>(static_cast<int>(random() % 2001) - 1000) / 1000;
   }
   const auto original_left = left, original_right = right;
@@ -257,13 +258,14 @@ TEST(Dsp_PhaseVocoder, StereoToneKeepsQuadraturePhase) {
   shifter.set_pitch_ratio(ratio); shifter.reset();
   auto left = sine(48000, 48000, 997.1), right = left;
   for (size_t i = 0; i < right.size(); ++i)
-    right[i] = 0.5 * std::cos(riw::two_pi<double> * 997.1 * i / 48000);
+    right[i] = 0.5 * std::cos(riw::two_pi<double> * 997.1 * static_cast<double>(i) / 48000);
   std::array<const double *, 2> in{left.data(), right.data()};
   std::array<double *, 2> out{left.data(), right.data()};
   ASSERT_TRUE(shifter.process(in, out, left.size()));
   std::complex<double> l{}, r{};
   for (size_t i = left.size() / 2; i < left.size(); ++i) {
-    const auto oscillator = std::polar(1., riw::two_pi<double> * 997.1 * ratio * i / 48000);
+    const auto oscillator = std::polar(
+        1., riw::two_pi<double> * 997.1 * ratio * static_cast<double>(i) / 48000);
     l += left[i] * oscillator; r += right[i] * oscillator;
   }
   EXPECT_NEAR(std::arg(r * std::conj(l)), -riw::two_pi<double> / 4, 0.01);

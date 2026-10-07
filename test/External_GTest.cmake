@@ -4,11 +4,13 @@ include(ExternalProject)
 ExternalProject_Add(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.15.2
         UPDATE_COMMAND ""
         INSTALL_COMMAND ""
         LOG_DOWNLOAD ON
         LOG_CONFIGURE ON
-        LOG_BUILD ON)
+        LOG_BUILD ON
+        LOG_OUTPUT_ON_FAILURE ON)
 
 ExternalProject_Get_Property(googletest source_dir)
 set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include)

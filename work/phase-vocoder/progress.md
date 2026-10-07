@@ -163,3 +163,34 @@ its identifier and remote confirmation are reported in the chat after push.
 - Review/CI on the PR can be inspected in GitHub; no merge or deployment was
   requested. CuteAudioPoC integration and deployment-hardware CPU measurement
   remain with the original Micro-Unison task.
+
+## Windows CI correction (2026-10-07, in progress)
+- User reported Windows build failure on PR #2. Run 37598594414 at head
+  81383a01b5709d1a3842d019e56597cd14c6163f failed in the GoogleTest git-clone
+  ExternalProject download step, before compiling riw tests. Other OS jobs
+  were cancelled by fail-fast; their success is not established.
+- ExternalProject defaults an omitted GIT_TAG to master. GoogleTest's remote
+  advertises main and no master. CMake now pins v1.15.2, the same dependency
+  version already specified by MODULE.bazel, and emits failed external-build
+  log output directly into CI logs.
+- Added test code contained size_t-to-double conversions and signed initializer
+  lists. Explicit conversions and size_t arrays retain numeric behavior and
+  remove conversion diagnostics under strict compilation.
+- Existing template_string_literal construction used a signed loop index against
+  unsigned Size; local CMake emitted sign-compare warnings. The loop now uses
+  std::size_t, preserving the public length type and behavior while removing
+  the corresponding Windows /W4 /WX warning hazard.
+- Strict C++20 clang -Wall -Wextra -Wconversion -Werror syntax checks passed
+  for modified DSP/FFT tests. CMake Debug dependency download/configure/build
+  succeeded with the pinned tag. The full Bazel suite passes all 9 targets, and the CMake Debug runtime
+  executable passes all 38 tests (84.045 seconds, including existing UBSan).
+- Windows Debug/Release CI confirmation remains pending; no claim of completion
+  is made for this follow-up until those jobs pass.
+
+Windows correction validation input (SHA-256, excluding ledger):
+```text
+67a02e84fdc8fb8ed14af72f1d9d966209b4d05ce78f00eecb4f8042e631fc40  test/External_GTest.cmake
+08938c166d268dd70ec498310d26ec854767419973f013a2f36cfc3676a04dca  test/dsp/phase_vocoder.cpp
+72029bed46515a8d9046e39cd406745e0228a29f562b53a25acec23d5361832e  test/math/fft.cpp
+422c17287913cb3313a2508a39ae5e212c158e9fc775257e4dd0700b6f666a77  include/riw/utility/template_string_literal.hpp
+```

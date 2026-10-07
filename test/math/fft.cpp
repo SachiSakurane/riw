@@ -90,9 +90,12 @@ TEST(Math_FftTest, SupportsFloatComplexContainers) {
 
 TEST(Math_FftTest, InPlaceMatchesExistingTransformAndRoundTrips) {
   using complex = std::complex<double>;
-  for (size_t n : {1, 2, 16, 256}) {
+  for (size_t n : std::array<size_t, 4>{1, 2, 16, 256}) {
     std::vector<complex> input(n), expected(n);
-    for (size_t i = 0; i < n; ++i) input[i] = {std::sin(i * 0.3), std::cos(i * 0.4)};
+    for (size_t i = 0; i < n; ++i) {
+      const auto index = static_cast<double>(i);
+      input[i] = {std::sin(index * 0.3), std::cos(index * 0.4)};
+    }
     riw::fft(input, expected);
     auto actual = input;
     ASSERT_TRUE(riw::fft_inplace(std::span<complex>(actual)));

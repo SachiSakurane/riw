@@ -8,7 +8,7 @@ struct template_string_literal {
   static constexpr int length = Size - 1;
 
   constexpr template_string_literal(const char (&s_literal)[Size]) {
-    for (int i = 0; i < Size; i++)
+    for (std::size_t i = 0; i < Size; i++)
       buf[i] = s_literal[i];
     buf[length] = '\0';
   }
