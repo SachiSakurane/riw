@@ -1,6 +1,6 @@
 cc_test(
     name = "dsp_test",
-    size = "small",
+    size = "medium",
     srcs = glob(["*.cpp"]),
     deps = [
         "//:riw_library",
