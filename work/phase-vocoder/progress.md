@@ -194,3 +194,18 @@ Windows correction validation input (SHA-256, excluding ledger):
 72029bed46515a8d9046e39cd406745e0228a29f562b53a25acec23d5361832e  test/math/fft.cpp
 422c17287913cb3313a2508a39ae5e212c158e9fc775257e4dd0700b6f666a77  include/riw/utility/template_string_literal.hpp
 ```
+
+### Windows CI second stage
+- Run 37605826732 at d9ef2f7001fc74ef56ae1c15a24415708ed96675 successfully
+  downloaded/configured/built GoogleTest, then MSVC reported C2124 in
+  hann_inplace<std::array<double,1>> at window.hpp:20. The constant divisor
+  size-1 is zero even though that runtime path follows the size==1 early return.
+- The denominator expression now uses size>1 ? size-1 : 1. Existing empty,
+  single-sample and normal Hann behavior is unchanged; the expression is valid
+  for all extents under MSVC's template diagnostics.
+- CMake rebuilt successfully; all 4 window tests passed. Strict C++20
+  -Wall -Wextra -Wconversion -Werror checks pass for DSP/window/FFT tests.
+- Full Bazel suite now passes all 9 targets for this stage (DSP 50.950 seconds).
+  Windows Debug/Release confirmation remains pending; the previous Windows CI
+  failure is not marked as passed.
+- Current window.hpp SHA-256: `b9817a11cff7210a60a161e82e687004904c9cd9a3ee6719a02b7a87e599e6db`.
