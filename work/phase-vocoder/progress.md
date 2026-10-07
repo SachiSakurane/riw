@@ -209,3 +209,17 @@ Windows correction validation input (SHA-256, excluding ledger):
   Windows Debug/Release confirmation remains pending; the previous Windows CI
   failure is not marked as passed.
 - Current window.hpp SHA-256: `b9817a11cff7210a60a161e82e687004904c9cd9a3ee6719a02b7a87e599e6db`.
+
+### Windows CI link stage
+- Run 37606363140 at 9ffd1a99217f92d388ca206a98a7c1783a9a8dac compiled all
+  riw test translation units, confirming the singleton-Hann fix. Linking then
+  failed with LNK1104 for lib/Debug/;libgtestd.lib.
+- Existing External_GTest.cmake interpolated CMAKE_FIND_LIBRARY_PREFIXES (a
+  candidate list) into every imported-library path. On Windows this produced
+  a semicolon-containing filename. Use the singular CMAKE_STATIC_LIBRARY_PREFIX
+  for gtest/gtest_main/gmock/gmock_main paths, matching the produced archive.
+- This changes only dependency library paths, not DSP or test behavior.
+  Windows Debug/Release link and runtime verification are still pending.
+- CMake Debug reconfigure/build and all 4 window tests pass after this path
+  correction. Executable C++ files are unchanged from the passing full suites.
+- External_GTest.cmake SHA-256: `9155963aff752474f1ce015dde07fc6052a203d315b24b7bc682b1677f43fac3`.
