@@ -17,7 +17,10 @@ constexpr void hann_inplace(ContainerType &srcdst) {
     return;
   }
 
-  const auto step = riw::two_pi<FloatType> / static_cast<FloatType>(size - 1);
+  // MSVC diagnoses constant division by zero for array<T, 1> even after the
+  // early return above. Keep the expression well-formed for every extent.
+  const auto denominator = size > 1 ? size - 1 : 1;
+  const auto step = riw::two_pi<FloatType> / static_cast<FloatType>(denominator);
   const auto cos_step = std::cos(step);
   const auto sin_step = std::sin(step);
   auto cos_angle = static_cast<FloatType>(1);

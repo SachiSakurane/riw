@@ -87,3 +87,25 @@ TEST(Math_FftTest, SupportsFloatComplexContainers) {
   for (size_t i = 0; i < src.size(); ++i)
     expect_complex_near(actual[i], src[i], 1e-5F);
 }
+
+TEST(Math_FftTest, InPlaceMatchesExistingTransformAndRoundTrips) {
+  using complex = std::complex<double>;
+  for (size_t n : std::array<size_t, 4>{1, 2, 16, 256}) {
+    std::vector<complex> input(n), expected(n);
+    for (size_t i = 0; i < n; ++i) {
+      const auto index = static_cast<double>(i);
+      input[i] = {std::sin(index * 0.3), std::cos(index * 0.4)};
+    }
+    riw::fft(input, expected);
+    auto actual = input;
+    ASSERT_TRUE(riw::fft_inplace(std::span<complex>(actual)));
+    for (size_t i = 0; i < n; ++i) expect_complex_near(actual[i], expected[i], 1e-12);
+    ASSERT_TRUE(riw::fft_inplace(std::span<complex>(actual), false));
+    for (size_t i = 0; i < n; ++i) expect_complex_near(actual[i], input[i], 1e-12);
+  }
+  std::array<complex, 3> invalid{complex{1}, complex{2}, complex{3}};
+  const auto copy = invalid;
+  EXPECT_FALSE(riw::fft_inplace(std::span<complex>(invalid)));
+  EXPECT_EQ(invalid, copy);
+  EXPECT_FALSE(riw::fft_inplace(std::span<complex>{}));
+}

@@ -3,7 +3,9 @@
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <concepts>
 #include <cstddef>
+#include <span>
 #include <utility>
 #include <vector>
 
@@ -32,8 +34,9 @@ inline ComplexType unit_root(size_t numerator, size_t denominator, bool is_forwa
   return std::polar(static_cast<value_type>(1), angle);
 }
 
-template <class ComplexType>
-inline void fft_power_of_two(std::vector<ComplexType> &values, bool is_forward) {
+template <class Container>
+inline void fft_power_of_two(Container &values, bool is_forward) {
+  using ComplexType = typename Container::value_type;
   const auto n = values.size();
   size_t bit_count = 0;
   for (auto width = n; width > 1; width >>= 1)
@@ -142,6 +145,20 @@ inline void fft_impl(const std::vector<ComplexType> &src, std::vector<ComplexTyp
   }
 }
 } // namespace detail
+
+// Unitary, radix-2 transform. No allocation; invalid sizes leave values untouched.
+// Like fft(), forward uses the positive exponential sign.
+template <std::floating_point FloatType>
+inline bool fft_inplace(std::span<std::complex<FloatType>> values,
+                        bool is_forward = true) noexcept {
+  if (!detail::is_power_of_two(values.size()))
+    return false;
+  detail::fft_power_of_two(values, is_forward);
+  const auto norm = FloatType{1} / std::sqrt(static_cast<FloatType>(values.size()));
+  for (auto &value : values)
+    value *= norm;
+  return true;
+}
 
 template <class SrcContainer, class DstContainer, bool IsForward = true>
 requires riw::convertible_to<typename SrcContainer::value_type,
