@@ -5,7 +5,8 @@ Implement and verify a reusable real-time C++20 streaming phase-vocoder pitch
 shifter for the CuteAudioPoC Micro-Unison FX DSP foundation. Application voice
 distribution, pan, time offset, mixing and CuteAudioPoC integration are excluded.
 Push explicitly requested on 2026-10-07 after the implementation handoff.
-No PR, merge or deployment requested. No delegation authorized.
+PR creation explicitly requested after push on 2026-10-07.
+No merge or deployment requested. No delegation authorized.
 
 ## Checkout and baseline
 - Independent checkout: /Users/sachi/Develop/riw; initial branch main, clean.
@@ -121,7 +122,8 @@ Implementation, documentation and verification complete within the agreed riw sc
 - Initial handoff contained no commit or push. Follow-up authorization now
   covers committing the verified artifacts and pushing codex/phase-vocoder
   to origin (https://github.com/SachiSakurane/riw.git).
-- PR, merge, deployment and task archival remain outside the requested scope.
+- PR creation subsequently authorized; merge, deployment and task archival
+  remain outside the requested scope.
 
 ## Verified uncommitted artifact identity
 Baseline commit remains 79add5e45de714fa4611cd2e8f392468a840d4e4 on branch
@@ -147,3 +149,17 @@ hashes still match the verified files; no implementation changes or new test
 runs were necessary. Delivery target is origin/codex/phase-vocoder, using a
 normal push with upstream tracking. The delivery commit includes this ledger;
 its identifier and remote confirmation are reported in the chat after push.
+
+## PR handoff (2026-10-07)
+- Implementation commit 944adc9abaa2131f31adf41336c99fe911ac4f61 was pushed to
+  origin/codex/phase-vocoder; local and upstream commit identifiers matched.
+- PR #2: https://github.com/SachiSakurane/riw/pull/2
+- Title: Add streaming phase-vocoder pitch shifter.
+- Base main, head codex/phase-vocoder. Remote branch inspection confirmed main
+  exists and develop does not; there was no existing open PR for this head.
+- PR covers all riw implementation/documentation/verification completion items.
+  Validation remains the recorded source hashes and passing tests above;
+  this follow-up changes only this ledger and requires no additional DSP tests.
+- Review/CI on the PR can be inspected in GitHub; no merge or deployment was
+  requested. CuteAudioPoC integration and deployment-hardware CPU measurement
+  remain with the original Micro-Unison task.
